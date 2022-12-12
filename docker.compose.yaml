@@ -1,0 +1,41 @@
+version: '3'
+services:
+  vote:
+    image: fhcebihi/voting-app
+    ports:
+      - "5000:80"
+    networks:
+      - front-end
+      - back-end
+    volumes:
+      - ./vote:/app
+  result:
+    image: fhcebihi/result-app
+    ports:
+      - "5001:80"
+    networks:
+      - front-end
+      - back-end
+  worker:
+    image: fhcebihi/worker-app
+    networks:
+      - back-end
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - back-end
+  db:
+    image: postgres
+    container_name: db
+    networks:
+      - back-end
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+volumes:
+  db-data:
+networks:
+  front-end:
+  back-end:
